@@ -11,10 +11,10 @@ export class MarketController {
 
   @Post()
   @ApiOperation({ summary: 'Купить скин' })
-  @ApiResponse({ status: 200, type: Boolean})
-  @ApiBody({type: BuySkinDto})
-  async buySkin(@Ip() ip:string, @Body() dto: BuySkinDto): Promise<boolean> {
-    const user = await this.usersService.getOrCreateUser(ip)
-    return await this.marketService.buySkin(user, dto.skinName)
+  @ApiResponse({ status: 200, type: Boolean })
+  @ApiBody({ type: BuySkinDto })
+  async buySkin(@Ip() ip: string, @Body() dto: BuySkinDto): Promise<boolean> {
+    const user = await this.usersService.getOrCreateUser(ip);
+    return await this.marketService.buySkin(user, dto.skinName);
   }
 }

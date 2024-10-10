@@ -8,6 +8,7 @@ import { CustomLoggerService } from './logger/custom-logger.service';
 import { DatabaseModule } from './infrastructure/database/database.module';
 import { SkinModule } from './modules/skin/skin.module';
 import { MarketModule } from './modules/market/market.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { MarketModule } from './modules/market/market.module';
     LoggerModule,
     DatabaseModule,
     SkinModule,
-    MarketModule
+    MarketModule,
+    CacheModule.register({ isGlobal: true }),
   ],
   controllers: [],
   providers: [CustomLoggerService],

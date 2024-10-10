@@ -1,10 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { GetAllSkinItemsResponseDto } from '../dto/get-all-items-reponse.dto';
 import { ApiService } from './api.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class ItemsService {
-  constructor(private readonly apiService: ApiService) {}
+  constructor(private readonly apiService: ApiService, @Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   async getAllSkinItems(): Promise<GetAllSkinItemsResponseDto[]> {
     const nonTradableItems = await this.apiService.getItems(false);
@@ -34,18 +36,21 @@ export class ItemsService {
         itemsMapped[item.market_hash_name].min_price_tradable = item.min_price;
       }
     }
+    await this.cacheManager.set(`items`, Object.values(itemsMapped), 30000);
     return Object.values(itemsMapped);
   }
 
-  async findTradableSkin(skinName: string): Promise<{market_hash_name: string, price: number}>{
+  async findTradableSkin(skinName: string): Promise<{ market_hash_name: string; price: number }> {
     const tradableItems = await this.apiService.getItems(true);
-    const foundItem = tradableItems.find((item)=>{return item.market_hash_name===skinName})
-    if (!foundItem){
-      throw new NotFoundException('Скин не найден.')
+    const foundItem = tradableItems.find((item) => {
+      return item.market_hash_name === skinName;
+    });
+    if (!foundItem) {
+      throw new NotFoundException('Скин не найден.');
     }
     return {
       market_hash_name: foundItem.market_hash_name,
       price: foundItem.min_price,
-    }
+    };
   }
 }
