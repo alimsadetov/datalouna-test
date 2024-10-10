@@ -2,6 +2,13 @@
 
 This repository contains the code for the Datalouna Test project.
 
+## Эндпоины из задания
+
+1. GET /items
+2. POST /market
+BODY {skinName: string}
+skinName можно взять любой из роута 1, к примеру "1st Lieutenant Farlow | SWAT"
+
 ## Запуск через Docker Compose
 
 1. npm run docker:build
@@ -27,7 +34,3 @@ Swagger документация будет доступна по адресу h
 - PrismaORM
 - Cache Manager
 - Swagger
-
-## Примечание
-
-При запуске сервера сразу запустится подтягивание данных с сайта https://openrouter.ai/api/v1/models, если нужно проверить без этого подтягивания то нужно убрать вызов метода в конструкторе src/modules/models/services/cron.service.ts
